@@ -10,9 +10,9 @@ using QuickGraph.Serialization;
 using QuickGraph.Algorithms.Observers;
 using QuickGraph.Collections;
 using QuickGraph.Algorithms.Search;
-
 class Hello
 {
+    Random random = new System.Random(10010000);
     public DijkstraShortestPathAlgorithm<node, Edge<node>> dijkstra;
     public List<string> path;
     public VertexPredecessorRecorderObserver<node, Edge<node>> predecessorObserver;
@@ -23,11 +23,16 @@ class Hello
     public List<Edge<node>> listEdgeShortestGraph;
     public List<Edge<node>> listEdgeNotInShortestGraph;
     public int[] exitnode = { 50, 101, 169 };
+
     public List<Road> myRoad;
     public int soCanh = 0;
+    public float[] ListDivisionPoint;
     static void Main()
     {
+
+    
         Hello x = new Hello();
+        
         List<IEnumerable<Edge<node>>> resultList = new List<IEnumerable<Edge<node>>>();
         x.SetRoad();
         x.setGraph();
@@ -38,7 +43,8 @@ class Hello
         }
 
         x.setUplist();
-
+        x.inintstanceDivisionPoint();
+        x.SetDivisionPoint();
         Console.WriteLine("sau day la cac canh o trong graph shortest_path");
 
         foreach(Edge<node> edge in x.listEdgeShortestGraph)
@@ -138,6 +144,7 @@ class Hello
             list.Add(myNode[index - 1]);
         }
 
+
         Double min = Double.MaxValue;
         node mexitNode = new node(0, 0, 0);
         foreach(node node in list)
@@ -212,5 +219,47 @@ class Hello
                 Console.Write("contain roi ne   ");
             }
         }
+    }
+
+
+    // khoi tao list division point vs so luong phan tu = so phan tu trong listEdgeNotInShortestGraph
+    void inintstanceDivisionPoint()
+    {
+        this.ListDivisionPoint = new float[this.listEdgeNotInShortestGraph.Count];
+        for(int i=0; i< ListDivisionPoint.Length; i++)
+        {
+            ListDivisionPoint[i] = 1 / 2;
+        }
+    }
+
+    // set divisionpoint theo tung dot 
+    
+    void SetDivisionPoint()
+    {
+
+        int k = 0;
+        foreach (Edge<node> edge in listEdgeNotInShortestGraph)
+        {
+
+            float Ti = (float)(5 * random.NextDouble());
+            float Tj = (float)(5 * random.NextDouble());
+            int i = edge.Source.thuTu;
+            int j = edge.Target.thuTu;
+            float phi = ListDivisionPoint[k];
+            float length = edgeCost[edge];
+            float delta_Tqi = length * phi;
+            float delta_Tqj = length * (1-phi);
+            float alpha = delta_Tqi / phi;
+            float beta = delta_Tqj / (1 - phi);
+            phi = (Tj - Tj + beta) / (alpha + beta);
+            ListDivisionPoint[k] = phi;
+            k += 1;
+        }
+    }
+
+    node Intersection_Distribution(node myNode)
+    {
+        
+        return new node(1,2,3);
     }
 }

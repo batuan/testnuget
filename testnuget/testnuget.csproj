@@ -78,6 +78,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EdgeAttribute.cs" />
     <Compile Include="Hello.cs" />
     <Compile Include="node.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
